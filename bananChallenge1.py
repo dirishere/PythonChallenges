@@ -1,4 +1,4 @@
-# "Find number [1-100]" console application. To exit, select -1.
+# "Find number [0-100]" console application. To exit, select -1.
 
 import random
 import sys
