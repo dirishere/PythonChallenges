@@ -16,21 +16,35 @@ def fun_guess_number():
     return number
 
 
-guess_number = fun_guess_number()
+def fun_validation(number_to_validation):
+    is_valid = True
+    if number_to_validation > 101 or number_to_validation < -1:
+        print(f"Your value {number_to_validation} is out of range!")
+        is_valid = False
+    else:
+        if number_to_validation > drawn_number:
+            print("Your number is too high!")
+            is_valid = True
+        else:
+            print("Your number is too small!")
+            is_valid = True
+    return is_valid
 
-while guess_number != drawn_number:
+
+def fun_exit():
     if guess_number == -1:
         sys.exit(0)
 
-    if guess_number > 101 or guess_number < -1:
-        print(f"Your value {guess_number} is out of range!")
-        guess_number = fun_guess_number()
-    else:
-        if guess_number > drawn_number:
-            print("Your number is too high!")
-        else:
-            print("Your number is too small!")
+
+guess_number = fun_guess_number()
+
+while guess_number != drawn_number:
+    fun_exit()
+    if fun_validation(guess_number):
         guess_number = fun_guess_number()
         counter += 1
+    else:
+        guess_number = fun_guess_number()
+
     if guess_number == drawn_number:
         print(f"You guessed! That's the number {drawn_number}! You hit in {counter} shots.")
