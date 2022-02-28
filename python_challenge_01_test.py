@@ -35,14 +35,14 @@ def test_prompting_messages_during_guessing(capfd):
 
 
 def test_guess_number_range_min(capfd):
-    min_guess_number = random.randrange(-100, -2)
+    min_guess_number = -2
     python_challenge_01.fun_validation(min_guess_number)
     out, err = capfd.readouterr()
     assert f"Your value {min_guess_number} is out of range!" in out
 
 
 def test_guess_number_range_max(capfd):
-    max_guess_number = random.randrange(101, 200)
+    max_guess_number = 101
     python_challenge_01.fun_validation(max_guess_number)
     out, err = capfd.readouterr()
     assert f"Your value {max_guess_number} is out of range!" in out
