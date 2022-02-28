@@ -13,7 +13,7 @@ def fun_guess_number():
         number = int(input("Guess what number is drawn [0-100]: "))
     except ValueError:
         print("It is not a number!")
-        sys.exit(0)
+        raise ValueError
     return number
 
 
