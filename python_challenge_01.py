@@ -5,7 +5,6 @@ import sys
 
 drawn_number = random.randrange(0, 100)
 counter = 1
-is_valid = True
 
 
 def fun_guess_number():
@@ -18,28 +17,28 @@ def fun_guess_number():
 
 
 def fun_validation(number_to_validation):
-    global is_valid
-    if number_to_validation > 101 or number_to_validation < -1:
-        print(f"Your value {number_to_validation} is out of range!")
-        is_valid = False
-    else:
+    if 101 > number_to_validation > -1:
+        is_valid = True
         if number_to_validation > drawn_number:
             print("Your number is too high!")
-            is_valid = True
         else:
             print("Your number is too small!")
-            is_valid = True
+    else:
+        is_valid = False
+        print(f"Your value {number_to_validation} is out of range!")
     return is_valid
 
 
 def fun_exit():
     if guess_number == -1:
-        sys.exit(0)
+        print("The user has terminated the program.")
+        sys.exit(-1)
+    if guess_number == drawn_number:
+        print(f"You guessed! That's the number {drawn_number}! You hit in {counter} shots.")
 
 
 if __name__ == "__main__":
     guess_number = fun_guess_number()
-
     while guess_number != drawn_number:
         fun_exit()
         if fun_validation(guess_number):
@@ -47,6 +46,4 @@ if __name__ == "__main__":
             counter += 1
         else:
             guess_number = fun_guess_number()
-
-        if guess_number == drawn_number:
-            print(f"You guessed! That's the number {drawn_number}! You hit in {counter} shots.")
+    fun_exit()
