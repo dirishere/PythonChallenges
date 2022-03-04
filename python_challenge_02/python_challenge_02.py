@@ -1,7 +1,7 @@
 import requests
 import json
 
-global code
+global currency_code
 
 
 def print_welcome_message():
@@ -11,8 +11,11 @@ def print_welcome_message():
 
 
 def select_currency():
+    codes = ['USD', 'CHF', 'EUR', 'UAH', 'RBL']
     user_code = input("What currency do you want to check?\n"
                       "[USD, CHF, EUR, UAH, RBL]: ")
+    if user_code.upper() not in codes:
+        raise TypeError("Currency not supported")
     return user_code
 
 
@@ -22,11 +25,15 @@ def provide_amount_to_convert():
 
 
 def get_currency_price(user_code):
-    global code
-    code = user_code
-    response_API = requests.get(f"http://api.nbp.pl/api/exchangerates/rates/a/{code}/?format=json")
-    json_data = response_API.text
-    return json_data
+    global currency_code
+    currency_code = user_code
+    if user_code.upper() == "RBL":
+        print("Make pace, not war. Currency is not supported!")
+        exit(-2)
+    else:
+        response_API = requests.get(f"http://api.nbp.pl/api/exchangerates/rates/a/{currency_code}/?format=json")
+        json_data = response_API.text
+        return json_data
 
 
 def print_currency_data(json_data):
@@ -41,8 +48,7 @@ def data_to_calculate(json_data):
 
 
 def print_calculated_price(calculated_price):
-    currency_code = code.upper()
-    print(f"Amount after conversion [{currency_code}]:", round(calculated_price, 2))
+    print(f"Amount after conversion [{currency_code.upper()}]:", round(calculated_price, 2))
 
 
 def exchange_checker_mode():
