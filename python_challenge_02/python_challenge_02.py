@@ -2,6 +2,8 @@ import requests
 import json
 
 global currency_code
+global user_code
+global user_amount
 
 
 def print_welcome_message():
@@ -11,23 +13,32 @@ def print_welcome_message():
 
 
 def select_currency():
-    codes = ['USD', 'CHF', 'EUR', 'UAH', 'RBL']
-    user_code = input("What currency do you want to check?\n"
-                      "[USD, CHF, EUR, UAH, RBL]: ")
-    if user_code.upper() not in codes:
-        raise TypeError("Currency not supported")
+    global user_code
+    is_selected = False
+    while not is_selected:
+        codes = ['USD', 'CHF', 'EUR', 'UAH', 'RBL']
+        user_code = input("What currency do you want to check? [USD, CHF, EUR, UAH, RBL]: ")
+        if user_code.upper() not in codes:
+            print("Currency not supported. Try again: ")
+        else:
+            is_selected = True
     return user_code
 
 
 def provide_amount_to_convert():
-    user_amount = input("Enter the amount to be converted [PLN]: ")
-    return int(user_amount)
+    global user_amount
+    try:
+        user_amount = int(input("Enter the amount to be converted [PLN]: "))
+    except ValueError:
+        print("This value should be a number. Come back when you understand what you are doing...")
+        exit(-2)
+    return user_amount
 
 
-def get_currency_price(user_code):
+def get_currency_price(provided_currency_code):
     global currency_code
-    currency_code = user_code
-    if user_code.upper() == "RBL":
+    currency_code = provided_currency_code
+    if provided_currency_code.upper() == "RBL":
         print("Make pace, not war. Currency is not supported!")
         exit(-2)
     else:
@@ -71,7 +82,7 @@ def select_mode():
         print("Welcome to the exchange rate checker mode.")
         exchange_checker_mode()
     if mode == "2":
-        print("Welcome to the currency conventer mode.")
+        print("Welcome to the currency converter mode.")
         converter_mode()
 
 
