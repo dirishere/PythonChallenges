@@ -1,6 +1,8 @@
 import requests
 import json
 
+global code
+
 
 def print_welcome_message():
     print("Welcome to the Banker app! The application has two modes of operation. \n "
@@ -14,7 +16,13 @@ def select_currency():
     return user_code
 
 
+def provide_amount_to_convert():
+    user_amount = input("Enter the amount to be converted [PLN]: ")
+    return int(user_amount)
+
+
 def get_currency_price(user_code):
+    global code
     code = user_code
     response_API = requests.get(f"http://api.nbp.pl/api/exchangerates/rates/a/{code}/?format=json")
     json_data = response_API.text
@@ -22,10 +30,19 @@ def get_currency_price(user_code):
 
 
 def print_currency_data(json_data):
-    data = json_data
-    parse_json = json.loads(data)
+    parse_json = json.loads(json_data)
     print("Date:", parse_json['rates'][0]['effectiveDate'])
     print("AVG Price [PLN]:", parse_json['rates'][0]['mid'])
+
+
+def data_to_calculate(json_data):
+    parse_json = json.loads(json_data)
+    return float(parse_json['rates'][0]['mid'])
+
+
+def print_calculated_price(calculated_price):
+    currency_code = code.upper()
+    print(f"Amount after conversion [{currency_code}]:", round(calculated_price, 2))
 
 
 def exchange_checker_mode():
@@ -35,7 +52,11 @@ def exchange_checker_mode():
 
 
 def converter_mode():
-    pass
+    currency = select_currency()
+    json_data = get_currency_price(currency)
+    price_to_calculate = data_to_calculate(json_data)
+    calculated_price = provide_amount_to_convert()/price_to_calculate
+    return print_calculated_price(calculated_price)
 
 
 def select_mode():
