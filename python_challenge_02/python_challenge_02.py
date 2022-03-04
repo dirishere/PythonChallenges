@@ -2,8 +2,8 @@ import requests
 import json
 
 global currency_code
-global user_code
-global user_amount
+global provided_currency_code
+global provided_amount
 
 
 def print_welcome_message():
@@ -13,29 +13,29 @@ def print_welcome_message():
 
 
 def select_currency():
-    global user_code
+    global provided_currency_code
     is_selected = False
     while not is_selected:
         codes = ['USD', 'CHF', 'EUR', 'UAH', 'RBL']
-        user_code = input("What currency do you want to check? [USD, CHF, EUR, UAH, RBL]: ")
-        if user_code.upper() not in codes:
+        provided_currency_code = input("What currency do you want to check? [USD, CHF, EUR, UAH, RBL]: ")
+        if provided_currency_code.upper() not in codes:
             print("Currency not supported. Try again: ")
         else:
             is_selected = True
-    return user_code
+    return provided_currency_code
 
 
 def provide_amount_to_convert():
-    global user_amount
+    global provided_amount
     try:
-        user_amount = int(input("Enter the amount to be converted [PLN]: "))
+        provided_amount = int(input("Enter the amount to be converted [PLN]: "))
     except ValueError:
         print("This value should be a number. Come back when you understand what you are doing...")
         exit(-2)
-    return user_amount
+    return provided_amount
 
 
-def get_currency_price(provided_currency_code):
+def get_currency_price():
     global currency_code
     currency_code = provided_currency_code
     if provided_currency_code.upper() == "RBL":
@@ -63,14 +63,14 @@ def print_calculated_price(calculated_price):
 
 
 def exchange_checker_mode():
-    currency = select_currency()
-    price = get_currency_price(currency)
+    select_currency()
+    price = get_currency_price()
     return print_currency_data(price)
 
 
 def converter_mode():
-    currency = select_currency()
-    json_data = get_currency_price(currency)
+    select_currency()
+    json_data = get_currency_price()
     price_to_calculate = data_to_calculate(json_data)
     calculated_price = provide_amount_to_convert()/price_to_calculate
     return print_calculated_price(calculated_price)
